@@ -1,3 +1,5 @@
+# rosters.py - A file to load dynasty rosters onto an excel spreadsheet
+
 from datetime import datetime
 import time
 from yahoo_oauth import OAuth2
@@ -54,6 +56,7 @@ def get_rosters(week):
 rosters = get_rosters(17) 
 print(len(rosters)) 
 
+# [TODO] Transaction updates are way too inefficient, needs optimization
 end_date = dynasty.settings()['end_date']
 end_date_as_dt = datetime.strptime(dynasty.settings()['end_date'], '%Y-%m-%d')
 
@@ -86,9 +89,7 @@ for x in post_17_transactions:
                 for player in team["roster"]:
                     if team["roster"]["player_id"] == player_id:
                         team["roster"].remove(player)
-                         
-
-                        
+                                
     # else: #add + drop
 # ----------------------------------------------------------------
 

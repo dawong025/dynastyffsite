@@ -21,24 +21,19 @@ def load_position(position, roster, owner):
         if (ws[char + str(2)].value == owner):
             owner_column = col
     
-    names = [sub['name'] for sub in roster if sub["position"] == position]
+    # Create a list of names to load onto spreadsheet where position matches via list comprehension
+    names = [sub.name for sub in roster if sub.position == position]
     
+    # Append to spreadsheet at start row
     for row, text in enumerate(names, start=positions[position][0]):
         ws.cell(column=owner_column, row=row, value=text)
 
     wb.save('dff.xlsx')
 
-
 def load_team(owner, roster):
     print('DEBUG-' + owner)
-    load_position("QB", roster, owner)
-    load_position("WR", roster, owner)
-    load_position("RB", roster, owner)
-    load_position("TE", roster, owner)
-    load_position("K", roster, owner)
-    load_position("LB", roster, owner)
-    load_position("DB", roster, owner)
-    load_position("DL", roster, owner)
+    position_types = ["QB", "RB", "WR", "TE", "K", "LB", "DB", "DL"]
 
-def update_rosters_post_17():
-    print()
+    for position in position_types:
+        load_position(position, roster, owner)
+    
