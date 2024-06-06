@@ -37,3 +37,5 @@ def load_team(owner, roster):
     for position in position_types:
         load_position(position, roster, owner)
     
+def strip_team_key(team_key):
+    return int(team_key[team_key.rindex('.')+1:])
