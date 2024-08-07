@@ -21,19 +21,18 @@ def clear_sheet(wb, sheet):
 
     workbook.save(wb)
 
-def load_position(position, roster, owner):
+def load_position(wb, ws, position, roster, owner):
     positions = { #end row + 1 for inclusivity
         "QB": [6, 16],
         "WR": [17, 34],
         "RB": [35, 47],
         "TE": [49, 58],
-        "K": [59, 62],
+        "K":  [59, 62],
         "LB": [63, 72],
         "DB": [73, 79],
         "DL": [80, 86]
     }
-    wb = load_workbook('dff.xlsx')
-    ws = wb['S8 End Roster']
+
     owner_column = -1
     for col in range (1, 18):
         char = get_column_letter(col)
@@ -49,27 +48,24 @@ def load_position(position, roster, owner):
 
     wb.save('dff.xlsx')
 
-def load_team(owner, roster):
+def load_team(wb, ws, owner, roster):
     print('DEBUG-' + owner)
     position_types = ["QB", "RB", "WR", "TE", "K", "LB", "DB", "DL"]
 
     for position in position_types:
-        load_position(position, roster, owner)
+        load_position(wb, ws, position, roster, owner)
     
 def strip_team_key(team_key):
     return int(team_key[team_key.rindex('.')+1:])
 
-def get_post17_transacts(dynasty, rosters):
-    print('N/A')
-
 def get_rosters(dynasty, team_keys, owner_names, week):
     # Reassign week when final transaction week exceeds league end week
     week_param = 1
-    if week == 18:
-        week_param = 17
+    # if week == 18:
+    if week == dynasty.end_week() + 1:
+        week_param = dynasty.end_week()
     else:
         week_param = week
-
     
     rosters = []
     team = []
@@ -82,7 +78,6 @@ def get_rosters(dynasty, team_keys, owner_names, week):
                 position = item["eligible_positions"][1]
             else:
                 position = item["eligible_positions"][0]
-            
 
             # player_details_name = ''
             # if '\'' in item["name"]:
@@ -96,7 +91,7 @@ def get_rosters(dynasty, team_keys, owner_names, week):
                 position, 
                 item["player_id"]
                 #,dynasty.player_details(player_details_name)[0]["editorial_team_full_name"]
-                , " " # Filler
+                # , " " # Filler
                 )
             team.append(player)
         roster = Roster(owner_names[i], team_keys[i], team)
@@ -147,9 +142,9 @@ def get_rosters(dynasty, team_keys, owner_names, week):
                 added_player = Player(
                     x["players"]["0"]['player'][0][2]['name']['full'], 
                     position, 
-                    x["players"]["0"]['player'][0][1]["player_id"]
+                    int(x["players"]["0"]['player'][0][1]["player_id"])
                     # ,dynasty.player_details(player_details_name)[0]["editorial_team_full_name"]
-                    , " "  # Filler
+                    # , " "  # Filler
                     )
                 roster_index = strip_team_key(x["players"]["0"]['player'][1]['transaction_data'][0]['destination_team_key']) - 1
                 roster = rosters[roster_index].roster
@@ -170,9 +165,9 @@ def get_rosters(dynasty, team_keys, owner_names, week):
                 added_player = Player(
                     x["players"]["0"]['player'][0][2]['name']['full'], 
                     x["players"]["0"]['player'][0][4]['display_position'], 
-                    x["players"]["0"]['player'][0][1]["player_id"]
+                    int(x["players"]["0"]['player'][0][1]["player_id"])
                     # ,dynasty.player_details(player_details_name)[0]["editorial_team_full_name"]
-                    , ' ' # Filler
+                    # , ' ' # Filler
                     )
                 
                 roster_index = strip_team_key(x["players"]["0"]['player'][1]['transaction_data'][0]['destination_team_key']) - 1
@@ -192,15 +187,16 @@ def get_rosters(dynasty, team_keys, owner_names, week):
         # IDs = [player.player_id for player in roster]
         # dynasty.player_details([player_IDs])
 
-    for roster in rosters:
-        # get player IDs for a singular roster
-        roster_player_IDs = [int(player.player_id) for player in roster.roster]
-        # get a roster's player details
-        roster_player_details = dynasty.player_details(roster_player_IDs)
+    # # gets the wrong team if the player swapped teams, api only allows current team
+    # for roster in rosters:
+    #     # get player IDs for a singular roster
+    #     roster_player_IDs = [int(player.player_id) for player in roster.roster]
+    #     # get a roster's player details
+    #     roster_player_details = dynasty.player_details(roster_player_IDs)
 
-        for i in range(len(roster_player_details)):
-            for j in range(len(roster.roster)):
-                if int(roster_player_details[i]['player_id']) == roster.roster[j].player_id:
-                    roster.roster[j].team = roster_player_details[i]['editorial_team_full_name']
-                    break
+    #     for i in range(len(roster_player_details)):
+    #         for j in range(len(roster.roster)):
+    #             if int(roster_player_details[i]['player_id']) == roster.roster[j].player_id:
+    #                 roster.roster[j].team = roster_player_details[i]['editorial_team_full_name']
+    #                 break
     return rosters
