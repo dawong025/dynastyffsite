@@ -3,7 +3,6 @@ word_cloud_pic.py - Used to read through the raw roster history sheet (dff word 
 a word cloud
 '''
 
-
 from matplotlib import pyplot as plt
 import pandas as pd
 from wordcloud import WordCloud, ImageColorGenerator
@@ -46,7 +45,7 @@ plt.tight_layout(pad=0)
 plt.axis("off")
 
 # store to file
-plt.savefig(f"Word Cloud/resources/clouds/{team_owner}.png", format="png")
+# plt.savefig(f"Word Cloud/resources/clouds/{team_owner}.png", format="png")
 
-# plt.show()
+plt.show()
 

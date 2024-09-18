@@ -16,7 +16,7 @@ df_concat = pd.DataFrame()
 
 with ExcelWriter(output_file) as output:
     for yr in range(2018, 2024):
-        input_file = f"./DFF Rosters/dff {yr}.xlsx"
+        input_file = f"./DFF Rosters/rosters/dff {yr}.xlsx"
         for sheet_name, df in pd.read_excel(input_file, sheet_name = None).items():
             df['source_sheet'] = sheet_name
             df_concat = pd.concat([df_concat, df], ignore_index=True, sort=False)

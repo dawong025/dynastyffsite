@@ -1,3 +1,10 @@
+'''
+get_picks.py - Used to get the default draft position per owner pre-trades.
+
+Reverse draft position for bottom 6 seeds, higher pick for winner of consolation 
+match for playoff teams (e.g. winner of 5vs6 matchup gets 1.07)
+'''
+
 from yahoo_oauth import OAuth2
 import yahoo_fantasy_api as yfa
 import operator
@@ -21,8 +28,7 @@ for key in list_team_keys:
     else:
         team_names.append(dynasty.teams()[key]["name"])
         owner_names.append(dynasty.teams()[key]["managers"][0]["manager"]["nickname"])
-
-organization = dict(zip(owner_names, team_names))
+league = dict(zip(owner_names, team_names))
 
 # print(organization)
     # 1 -> 12
