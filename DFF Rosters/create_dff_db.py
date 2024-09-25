@@ -1,6 +1,6 @@
 import sqlite3
 
-dff_db= sqlite3.connect("dynasty-db.db")
+dff_db = sqlite3.connect("dynasty-db.db")
 
 cursor = dff_db.cursor()
 
@@ -45,5 +45,26 @@ cursor = dff_db.cursor()
 #         )
 #     '''
 # )
+
+# cursor.execute(
+#     '''
+#         CREATE TABLE IF NOT EXISTS rookie_draft(
+#             draft_id INTEGER PRIMARY KEY AUTOINCREMENT,
+#             year INTEGER,
+#             member_id INTEGER,
+#             player_id INTEGER,
+#             pick VARCHAR(20),
+#             FOREIGN KEY(member_id)
+#             REFERENCES league_members(member_id)
+#                 ON UPDATE SET NULL
+#                 ON DELETE SET NULL
+#             FOREIGN KEY (player_id)
+#             REFERENCES player(player_id)
+#                 ON UPDATE SET NULL
+#                 ON DELETE SET NULL
+#         )
+#     '''
+# )
+
 
 

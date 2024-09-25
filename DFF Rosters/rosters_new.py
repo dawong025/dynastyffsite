@@ -1,7 +1,5 @@
 '''
 rosters_new.py - Used to get rosters and load them onto sheets
-
-TODO: Make a copy of the template workbook first, and then load the individual sheets
 '''
 
 from yahoo_oauth import OAuth2
@@ -45,11 +43,13 @@ league = dict(zip(owner_names, team_keys))
 
 #     print('-------------------------------')
 
-# Initial roster load
 
 wb = load_workbook('DFF Rosters/rosters/dff.xlsx')
 ws_template = wb['Roster Template']
 
+'''
+Load rosters onto spreadsheet for a given year
+'''
 # while (league_week <= dynasty.end_week() + 1):
 #     print(league_week)
 
@@ -65,7 +65,10 @@ ws_template = wb['Roster Template']
 # curr_wb = load_workbook(f'dff - {league_year}.xlsx')
 # curr_wb.remove(curr_wb['Roster Template'])
 
-#------------------------------------------------------------           
+#------------------------------------------------------------  
+'''
+Load rosters for a given week
+'''         
 rosters = get_rosters(dynasty, team_keys, owner_names, 1)
 ws = wb.copy_worksheet(ws_template)
 ws.title = f'Week {league_week}-{league_year} Roster'
@@ -73,6 +76,9 @@ ws.title = f'Week {league_week}-{league_year} Roster'
 for i in range(0, len(owner_names)):
     load_team(wb, ws, rosters[i].owner_name, rosters[i].roster, league_year) 
 
+'''
+Save rosters to a new workbook for a given league year
+'''
 curr_wb = load_workbook(f'DFF Rosters/rosters/dff - {league_year}.xlsx')
 curr_wb.remove(curr_wb['Roster Template'])
 curr_wb.save(f'DFF Rosters/rosters/dff - {league_year}.xlsx')

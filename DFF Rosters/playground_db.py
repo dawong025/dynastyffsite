@@ -28,5 +28,7 @@ Clear off current data in db
 '''
 # cursor.execute('DELETE FROM league_members')
 # cursor.execute('DELETE FROM player')
-# cursor.execute('DELETE FROM weekly_rostered')
-# dff_db.commit()
+# cursor.execute('DELETE FROM weekly_rostered where year = 2024 and week > 0')
+cursor.execute('DELETE FROM picks')
+
+dff_db.commit()
