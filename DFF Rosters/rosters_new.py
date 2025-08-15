@@ -82,3 +82,5 @@ Save rosters to a new workbook for a given league year
 curr_wb = load_workbook(f'DFF Rosters/rosters/dff - {league_year}.xlsx')
 curr_wb.remove(curr_wb['Roster Template'])
 curr_wb.save(f'DFF Rosters/rosters/dff - {league_year}.xlsx')
+
+# test
